@@ -1,7 +1,11 @@
 <?php
-require_once __DIR__ . '/datab.php';
+$conn = mysqli_connect("localhost", "root", "", "ladctracking");
+
 if (count($_FILES) > 0) {
-    if (is_uploaded_file($_FILES['userImage']['tmp_name'])) {
+    if (is_uploaded_file($_FILES['userImage1']['tmp_name']))
+    if (is_uploaded_file($_FILES['userImage2']['tmp_name']))
+    if (is_uploaded_file($_FILES['userImage3']['tmp_name']))
+    if (is_uploaded_file($_FILES['userImage4']['tmp_name'])){
         $time                   =   strtoupper($_POST['time']);
 //$date                 =   date('Y-m-d', strtotime($_POST['date']));
 $trailer	 	        = 	strtoupper($_POST['trailer']);
@@ -84,26 +88,36 @@ if ($rifront != 'YES RI FRONT'){
     $rifront = 'NO';
 }
 $rorear          =   strtoupper($_POST['rorear']);
-if ($lorear != 'YES LO REAR'){
-    $lorear = 'NO';
+if ($rorear != 'YES LO REAR'){
+    $rorear = 'NO';
 }
 $rirear         =   strtoupper($_POST['rirear']);
 if ($rirear != 'YES RI REAR'){
     $rirear = 'NO';
 }
 
-        $imgData = file_get_contents($_FILES['userImage']['tmp_name']);
-        $imgType = $_FILES['userImage']['type'];
-        $sql = "INSERT INTO inspection(imageType ,image1,time, trailer, guardname, clearance, frontlight, rearlight, stoplight, sidemarkers, taillight, rightside, leftside, rear, turnsignals, rightflap, leftflap, lofront, lifront, lorear, lirear, rofront, rifront, rorear, rirear) VALUES(?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?)";
+        $imgData1 = file_get_contents($_FILES['userImage1']['tmp_name']);
+        $imgData2 = file_get_contents($_FILES['userImage2']['tmp_name']);
+        $imgData3 = file_get_contents($_FILES['userImage3']['tmp_name']);
+        $imgData4 = file_get_contents($_FILES['userImage4']['tmp_name']);
+
+        $imgType1 = $_FILES['userImage1']['type'];
+        $imgType2 = $_FILES['userImage2']['type'];
+        $imgType3 = $_FILES['userImage3']['type'];
+         $imgType4 = $_FILES['userImage4']['type'];
+        
+        $sql = "INSERT INTO inspection(imageType1 ,image1,imageType2,image2, imageType3,image3, imageType4,image4,time, trailer, guardname, clearance, frontlight, rearlight, stoplight, sidemarkers, taillight, rightside, leftside, rear, turnsignals, rightflap, leftflap, lofront, lifront, lorear, lirear, rofront, rifront, rorear, rirear) VALUES(?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?)";
         $statement = $conn->prepare($sql);
-        $statement->bind_param('sssssssssssssssssssssssss', $imgType, $imgData,$time,$trailer,$guardname,$clearance,$frontlight,$rearlight,$stoplight,$sidemarkers,$taillight,$rightside,$leftside,$rear,$turnsignals,$rightflap,$leftflap,$lofront,$lifront,$lorear,$lirear,$rofront,$rifront,$rorear,$rirear);
-        $current_id = $statement->execute() or die("<b>Error:</b> Problem on Image Insert<br/>" . mysqli_connect_error());
+        $statement->bind_param('sssssssssssssssssssssssssssssss', $imgType1, $imgData1,$imgType2,$imgData2,$imgType3,$imgData3,$imgType4,$imgData4,$time,$trailer,$guardname,$clearance,$frontlight,$rearlight,$stoplight,$sidemarkers,$taillight,$rightside,$leftside,$rear,$turnsignals,$rightflap,$leftflap,$lofront,$lifront,$lorear,$lirear,$rofront,$rifront,$rorear,$rirear);
+        $current_id = $statement->execute();
+        $current_id = $statement->close();
+        
     }
 }
 ?>
 <HTML>
 <HEAD>
-<TITLE>Upload Image to MySQL BLOB</TITLE>
+<TITLE>Inspection Page</TITLE>
 <link href="css/form.css" rel="stylesheet" type="text/css" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <style>
@@ -228,7 +242,7 @@ if ($rirear != 'YES RI REAR'){
 	<div class="container">
 		<div class="col"
 >
-        <h2> 8. Security Procedures</h2>   
+        <h2> </h2>   
 <br>
             <div class="text"  style="border: thin solid black">
 				<td align="right" class="auto-style1">Time In   </td>
@@ -272,18 +286,45 @@ echo "</select>";
 
 			</div>
         <div class="phppot-container tile-container">
-            <label>Upload Image File:</label>
+            <label>Upload Front Image :</label>
             <div class="row">
-                <input name="userImage" type="file" class="full-width" />
+                <input name="userImage1" type="file" class="full-width" />
             </div>
+           
+        </div>
+            
+                 <div class="phppot-container tile-container">
+            <label>Upload Back File:</label>
             <div class="row">
+                <input name="userImage2" type="file" class="full-width" />
+            </div>
+           
+        </div>
+            
+                  <div class="phppot-container tile-container">
+            <label>Upload Left File:</label>
+            <div class="row">
+                <input name="userImage3" type="file" class="full-width" />
+            </div>
+           
+        </div>
+            
+                      <div class="phppot-container tile-container">
+            <label>Upload Right File:</label>
+            <div class="row">
+                <input name="userImage4" type="file" class="full-width" />
+            </div>
+           
+        </div>
+            
+            
+             <div class="row">
                 <input type="submit" value="Submit" />
             </div>
-        </div>
 
             		</div>
         	<div class="col">
-         <h2>⠀⠀⠀ </h2>   
+         <h2> </h2>   
 
 
 			<div class="text">
@@ -378,7 +419,56 @@ echo "</select>";
 			</div>
 		</div>
 	</div>
+       <div class="fixed">
+            <table style="width: 100%">
+                     <tr>
+                    <td align="center"><a href="Securitymenu.php">HOME</a></td>
 
+                                                            <td align="center"><a href="inspectionmenu.php">INSPECTION MENU</a></td>
+
+                    
+                    <td align="center"><a href="InsertTrailerLADC.php">INBOUND</a></td>
+
+                    <td align="center"><a href="securitywestgate.php">OUTBOUND WEST GATE</a></td>
+
+                    <td align="center"><a href="securityscr.php">OUTBOUND EAST GATE</a></td>
+
+                </tr>
+            </table>
+
+            <table border="0">
+                <tbody>
+                    <tr>
+                        <td style="width: 1120px">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td><img src="penskesmall.gif" border="0"></td>
+                    </tr>
+                    <tr>
+                        <td width="1900" height="20px" bgcolor="#FDD017"></td>
+                    </tr>
+                    <tr>
+                        <td width="1900" height="20px" bgcolor="#151B8D"></td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+
+            </table>
+        </div>
+        <table border='0'>
+            <tr>
+                <td style="width: 1120px">&nbsp;</td>
+            </tr>
+        </table>
     </form>
 </BODY>
 </HTML>

@@ -10,4 +10,4 @@ TotalSum = TotalSum + rCell.Value
 End If
 Next rCell
 SumByColor = TotalSum
-End Function
+End Function - 
